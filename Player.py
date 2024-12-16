@@ -1,7 +1,5 @@
 import random
-
 import pygame
-
 from Grid import Grid
 
 
@@ -47,8 +45,10 @@ class Player:
             (x * Grid.CELL_SIZE + Grid.CELL_SIZE // 2, y * Grid.CELL_SIZE + Grid.CELL_SIZE // 2),
             Grid.CELL_SIZE // 3)
 
-class Chaser(Player):
+
+class Hunter(Player):
     pass
 
-class Victim(Player):
+
+class Pray(Player):
     pass
