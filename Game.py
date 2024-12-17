@@ -3,7 +3,7 @@ import pygame
 import random
 
 from Grid import Grid
-from Player import Chaser, Victim
+from Player import Hunter, Pray
 from Reward import Reward
 
 
@@ -14,13 +14,13 @@ class Game:
         pygame.display.set_caption("NN Tags")
         self.clock = pygame.time.Clock()
 
-        self.chaser = Chaser(1, 1)
-        self.victim = Victim(Grid.GRID_SIZE - 2, Grid.GRID_SIZE - 2)
+        self.hunter = Hunter(1, 1)
+        self.pray = Pray(Grid.GRID_SIZE - 2, Grid.GRID_SIZE - 2)
         self.turns = 6
         self.running = True
 
-        self.chaser_rewards = []
-        self.victim_rewards = []
+        self.hunter_rewards = []
+        self.pray_rewards = []
 
     def run(self):
         round_number = 1
@@ -36,23 +36,23 @@ class Game:
 
             print(f"Round {round_number}:")
 
-            self.chaser.position = self.chaser.random_move(self.chaser.position)
-            chaser_reward = Reward.reward_chaser_calculation(self.victim.position, self.chaser.position)
-            self.chaser_rewards.append(chaser_reward)
+            self.hunter.position = self.hunter.random_move(self.hunter.position)
+            hunter_reward = Reward.reward_hunter_calculation(self.pray.position, self.hunter.position)
+            self.hunter_rewards.append(hunter_reward)
 
-            if self.chaser.position == self.victim.position:
-                print(f"Chaser caught the victim!")
-                chaser_reward = Reward.reward_chaser_calculation(self.victim.position, self.chaser.position)
-                victim_reward = Reward.reward_victim_calculation(self.victim.position, self.chaser.position)
+            if self.hunter.position == self.pray.position:
+                print(f"Hunter caught the Pray!")
+                hunter_reward = Reward.reward_hunter_calculation(self.pray.position, self.hunter.position)
+                pray_reward = Reward.reward_pray_calculation(self.pray.position, self.hunter.position)
 
-                self.chaser_rewards[-1] = chaser_reward
-                self.victim_rewards.append(victim_reward)
+                self.hunter_rewards[-1] = hunter_reward
+                self.pray_rewards.append(pray_reward)
                 self.draw_game_state()
                 break
 
-            self.victim.position = self.victim.random_move(self.victim.position)
-            victim_reward = Reward.reward_victim_calculation(self.victim.position, self.chaser.position)
-            self.victim_rewards.append(victim_reward)
+            self.pray.position = self.pray.random_move(self.pray.position)
+            pray_reward = Reward.reward_pray_calculation(self.pray.position, self.hunter.position)
+            self.pray_rewards.append(pray_reward)
 
             self.draw_game_state()
 
@@ -68,21 +68,21 @@ class Game:
     def draw_game_state(self):
         self.screen.fill(Grid.BLACK)
         Grid.draw_grid(self.screen)
-        Chaser.draw_visibility(self.screen, self.chaser.position, Grid.LIGHT_BLUE)
-        Victim.draw_visibility(self.screen, self.victim.position, Grid.LIGHT_RED)
-        Chaser.draw_player(self.screen, *self.chaser.position, Grid.BLUE)
-        Victim.draw_player(self.screen, *self.victim.position, Grid.RED)
+        Hunter.draw_visibility(self.screen, self.hunter.position, Grid.LIGHT_BLUE)
+        Pray.draw_visibility(self.screen, self.pray.position, Grid.LIGHT_RED)
+        Hunter.draw_player(self.screen, *self.hunter.position, Grid.BLUE)
+        Pray.draw_player(self.screen, *self.pray.position, Grid.RED)
         pygame.display.flip()
 
     def show_statistics(self):
-        total_chaser_reward = sum(self.chaser_rewards)
-        total_victim_reward = sum(self.victim_rewards)
+        total_hunter_reward = sum(self.hunter_rewards)
+        total_pray_reward = sum(self.pray_rewards)
 
         print("\nGame Over!")
-        print(f"Chaser Rewards: {self.chaser_rewards}")
-        print(f"Victim Rewards: {self.victim_rewards}")
-        print(f"Total Chaser Reward: {total_chaser_reward}")
-        print(f"Total Victim Reward: {total_victim_reward}")
+        print(f"Hunter Rewards: {self.hunter_rewards}")
+        print(f"Pray Rewards: {self.pray_rewards}")
+        print(f"Total Hunter Reward: {total_hunter_reward}")
+        print(f"Total Pray Reward: {total_pray_reward}")
 
 
 if __name__ == "__main__":
